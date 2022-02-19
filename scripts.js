@@ -1,11 +1,10 @@
 (function () {
-    var initial_deposit = document.querySelector('#initial_deposit'),
+    var initial_deposit = document.getElementById('initial_deposit'),
         contribution_amount = document.querySelector('#contribution_amount'),
         investment_timespan = document.querySelector('#investment_timespan'),
         investment_timespan_text = document.querySelector('#investment_timespan_text'),
         estimated_return = document.querySelector('#estimated_return'),
         future_balance = document.querySelector('#future_balance');
-
     function updateValue(element, action) {
         var min = parseFloat(element.getAttribute('min')),
             max = parseFloat(element.getAttribute('max')),
@@ -90,11 +89,11 @@
         chart.data.datasets[1].data = data.datasets[1].data;
         chart.update();
     }
-
+    console.log(initial_deposit);
     initial_deposit.addEventListener('change', function () {
         updateValue(this);
     });
-
+    
     contribution_amount.addEventListener('change', function () {
         updateValue(this);
     });
