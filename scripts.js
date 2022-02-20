@@ -36,6 +36,10 @@
         updateChart();
     }
 
+    function numberWithCommas(x) {
+       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     function getChartData() {
         var P = parseFloat(initial_deposit.dataset.value), // Principal
             r = parseFloat(estimated_return.dataset.value / 100), // Annual Interest Rate
@@ -81,7 +85,7 @@
                 balance = (compound_interest + contribution_interest).toFixed(0);
             }
 
-            future_balance.innerHTML = '$' + balance;
+            future_balance.innerHTML = '$' + numberWithCommas(balance);
             principal_dataset.data.push(principal);
             interest_dataset.data.push(interest);
             total_principal = principal;
@@ -90,9 +94,9 @@
 
         }
 
-        your_contributions.innerHTML = ("$" + String(total_principal));
-        your_compound_returns.innerHTML = ("$" + String(total_interest));
-        your_value.innerHTML = ("$" + String(parseFloat(total_principal)+parseFloat(total_interest)));
+        your_contributions.innerHTML = ("$" + numberWithCommas(total_principal));
+        your_compound_returns.innerHTML = ("$" + numberWithCommas(total_interest));
+        your_value.innerHTML = ("$" + numberWithCommas(parseFloat(total_principal)+parseFloat(total_interest)));
 
         return {
             labels: labels,
@@ -159,7 +163,7 @@
 
     var ctx = document.getElementById('myChart').getContext('2d'),
         chart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: getChartData(),
             options: {
                 legend: {
