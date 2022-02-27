@@ -2,6 +2,7 @@
 (function () {
     var initial_deposit = document.getElementById('initial_deposit'),
         contribution_amount = document.querySelector('#contribution_amount'),
+        investment_goal = document.querySelector('#investment_goal');
         investment_timespan = document.querySelector('#investment_timespan'),
         investment_timespan_text = document.querySelector('#investment_timespan_text'),
         estimated_return = document.querySelector('#estimated_return'),
@@ -111,11 +112,12 @@
         chart.data.labels = data.labels;
         chart.data.datasets[0].data = data.datasets[0].data;
         chart.data.datasets[1].data = data.datasets[1].data;
-        console.log(data);
         chart.update();
     }
 
-  
+    initial_deposit.addEventListener('change', function () {
+        updateValue(this);
+    });
     initial_deposit.addEventListener('change', function () {
         updateValue(this);
     });
