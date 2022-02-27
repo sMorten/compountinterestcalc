@@ -1,3 +1,4 @@
+
 (function () {
     var initial_deposit = document.getElementById('initial_deposit'),
         contribution_amount = document.querySelector('#contribution_amount'),
@@ -204,3 +205,5 @@
         });
 
 })();
+
+//set target date to today as min and a year from now as the default.
