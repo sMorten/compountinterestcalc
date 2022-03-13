@@ -2,7 +2,8 @@
     var cInterestManager = new CInterestClass("fixed",'rgb(0, 123, 255)','#1AAF5D');
     console.log("Interest Manager Initiated");
     for (const key in cInterestManager.fields) {
-        document.querySelector(cInterestManager.fields[key].clickListener).addEventListener("click", ()=>{
+        document.querySelector(cInterestManager.fields[key].clickListener).addEventListener("click", (e)=>{
+            e.preventDefault();
             cInterestManager.changeMode(key);
         });
     };
@@ -24,7 +25,7 @@
 
 })();
 
-
+/*
 (function () {
     var initial_deposit = document.getElementById('initial_deposit'),
         contribution_amount = document.querySelector('#contribution_amount'),
@@ -38,7 +39,7 @@
         your_contributions = document.querySelector("#cinterest_result_contributions"),
         your_compound_returns = document.querySelector("#cinterest_result_compounded_return"),
         your_value= document.querySelector("#cinterest_result_value");
-        console.log("test22");
+       
     function updateValue(element, action) {
         console.log(element + " : "+action);;
         var min = parseFloat(element.getAttribute('min')),
@@ -143,7 +144,6 @@
     }
 
     initial_deposit.addEventListener('change', function () {
-        console.log(this);
         updateValue(this);
     });
     initial_deposit.addEventListener('change', function () {
@@ -177,7 +177,7 @@
     for (var j = 0; j < radios.length; j++) {
         radios[j].addEventListener('change', updateChart);
     }*/
-
+/*
     var buttons = document.querySelectorAll('[data-counter]');
     for (var i = 0; i < buttons.length; i++) {
         var button = buttons[i];
@@ -235,5 +235,5 @@
         });
 
 })();
-
+*/
 //set target date to today as min and a year from now as the default.

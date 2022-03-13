@@ -22,7 +22,7 @@ class CInterestClass {
 				'fields': ['.smc-fixed-control','.smc-fixed-result']
 			}
 		};
-		this.chart_canvas = '#myChart';
+		this.chart_canvas = 'myChart';
 		this.cal_results = {
 			contributions: '',
 			compounded_returns: '',
@@ -34,7 +34,54 @@ class CInterestClass {
 
 		};
 		this.chart_data = '';
+
 		this.changeMode(mode);
+		var classThis = this;
+		this.chart = new Chart(document.getElementById(this.chart_canvas).getContext('2d'), {
+			type: 'line',
+            data: classThis.getChartData(),
+            options: {
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            return data.datasets[tooltipItem.datasetIndex].label + ': $' + tooltipItem.yLabel;
+                        }
+                    }
+                },
+                responsive: true,
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Year'
+                        }
+                    }],
+                    yAxes: [{
+                        stacked: true,
+                        ticks: {
+                            callback: function (value) {
+                                return '$' + value;
+                            }
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Balance'
+                        }
+                    }]
+                }
+            }
+		});
+		
+		document.querySelector('#investment_timespan').addEventListener('change', function () {
+	        document.querySelector('#investment_timespan_text').innerHTML = this.value + ' years';
+	        
+    	});
 	}
 
 	//Function to change system modes
@@ -95,7 +142,7 @@ class CInterestClass {
 
 	//Update data values and values
 	updateValue(element, action) {
-        console.log(element + " : "+action);;
+       
         var min = parseFloat(element.getAttribute('min')),
             max = parseFloat(element.getAttribute('max')),
             step = parseFloat(element.getAttribute('step')) || 1,
@@ -123,40 +170,111 @@ class CInterestClass {
 
 
 	//Build Chart Data
-	buildChartData(){
-		try{
-			
-		} catch(err){
+	getChartData(){
+		//try{
+			//Set Fields
+			var P = parseFloat(document.getElementById('initial_deposit').dataset.value), // Principal
+	            r = parseFloat(document.querySelector('#estimated_return').dataset.value / 100), // Annual Interest Rate
+	            c = parseFloat(document.querySelector('#contribution_amount').dataset.value), // Contribution Amount
+	            //n = parseInt(document.querySelector('[name="compound_period"]:checked').value), // Compound Period
+	            //n2 = parseInt(document.querySelector('[name="contribution_period"]:checked').value), // Contribution Period
+	            t = parseInt(document.querySelector('#investment_timespan').value), // Investment Time Span
+	            currentYear = (new Date()).getFullYear(),
+	            n = parseInt(document.querySelector("#compound_frequency").value),
+	            n2 = parseInt(document.querySelector("#contribution_frequency").value),
+	            total_principal = 0,
+	            total_interest = 0;
+
+
+	        var //initial_deposit = document.getElementById('initial_deposit'),
+		        contribution_amount = document.querySelector('#contribution_amount'),
+		        investment_goal = document.querySelector('#investment_goal'),
+		        investment_timespan = document.querySelector('#investment_timespan'),
+		        investment_timespan_text = document.querySelector('#investment_timespan_text'),
+		        estimated_return = document.querySelector('#estimated_return'),
+		        future_balance = document.querySelector('#future_balance'),
+		        contribution_frquency = document.querySelector("#contribution_frequency"),
+		        compound_frquency = document.querySelector("#compound_frequency"),
+		        your_contributions = document.querySelector("#cinterest_result_contributions"),
+		        your_compound_returns = document.querySelector("#cinterest_result_compounded_return"),
+		        your_value= document.querySelector("#cinterest_result_value");
+
+
+			if(this.mode==="fixed"){
+
+				//Build chart data around fixed mode
+				var labels = [];
+		        for (var year = currentYear; year < currentYear + t; year++) {
+		            labels.push(year);
+		        }
+
+		        var principal_dataset = {
+		            label: 'Total Principal',
+		            backgroundColor: 'rgb(0, 123, 255)',
+		            data: []
+		        };
+
+		        var interest_dataset = {
+		            label: "Total Interest",
+		            backgroundColor: '#1AAF5D',
+		            data: []
+		        };
+
+		        for (var i = 1; i <= t; i++) {
+		            var principal = P + ( c * n2 * i ),
+		                interest = 0,
+		                balance = principal;
+
+		            if (r) {
+		                var x = Math.pow(1 + r / n, n * i),
+		                    compound_interest = P * x,
+		                    contribution_interest = c * (x - 1) / (r / n2);
+		                interest = (compound_interest + contribution_interest - principal).toFixed(0)
+		                balance = (compound_interest + contribution_interest).toFixed(0);
+		            }
+
+		            future_balance.innerHTML = '$' + smcNumberWithCommas(balance);
+		            principal_dataset.data.push(principal);
+		            interest_dataset.data.push(interest);
+		            total_principal = principal;
+		            total_interest = interest;
+
+
+		        }
+
+		        your_contributions.innerHTML = ("$" + smcNumberWithCommas(total_principal));
+		        your_compound_returns.innerHTML = ("$" + smcNumberWithCommas(total_interest));
+		        your_value.innerHTML = ("$" + smcNumberWithCommas(parseFloat(total_principal)+parseFloat(total_interest)));
+
+		        return {
+		            labels: labels,
+		            datasets: [principal_dataset, interest_dataset]
+		        }
+
+			} else if(this.mode=="date"){
+				//Build chart data around date mode
+
+
+			} else {
+				console.error("System mode not defined");
+			}
+
+
+
+		/*} catch(err){
 			console.error(err.message);
-		}
-	}
-
-
-	//Calculate values
-	calculateValues(){
-		try{
-
-		} catch(err){
-			console.error(err.message);
-		}
+		}*/
 	}
 
 
 	//Build Chart
-	buildChart(){
-		try{
-			let chartData = buildChartData();
-
-			
-		} catch(err){
-			console.error(err.message);
-		}
-	}
-
-	//rebuild
 	updateChart(){
 		try{
-			
+			var data = this.getChartData();
+			this.chart.data.labels = data.labels;
+        	this.chart.data.datasets[0].data = data.datasets[0].data;
+        	this.chart.data.datasets[1].data = data.datasets[1].data;
+        	this.chart.update();
 		} catch(err){
 			console.error(err.message);
 		}
