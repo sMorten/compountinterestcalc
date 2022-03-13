@@ -1,3 +1,29 @@
+(function(){
+    var cInterestManager = new CInterestClass("fixed",'rgb(0, 123, 255)','#1AAF5D');
+    console.log("Interest Manager Initiated");
+    for (const key in cInterestManager.fields) {
+        document.querySelector(cInterestManager.fields[key].clickListener).addEventListener("click", ()=>{
+            cInterestManager.changeMode(key);
+        });
+    };
+
+    //Set Fields
+    var listenerFields = [
+        '#initial_deposit',
+        '#contribution_amount',
+        '#investment_goal',
+        '#investment_timespan',
+        '#smc_target_date',
+        '#contribution_frequency',
+        '#compound_frequency'
+        ];
+    cInterestManager.registerListeners(listenerFields);
+
+
+
+
+})();
+
 
 (function () {
     var initial_deposit = document.getElementById('initial_deposit'),
@@ -14,6 +40,7 @@
         your_value= document.querySelector("#cinterest_result_value");
         console.log("test22");
     function updateValue(element, action) {
+        console.log(element + " : "+action);;
         var min = parseFloat(element.getAttribute('min')),
             max = parseFloat(element.getAttribute('max')),
             step = parseFloat(element.getAttribute('step')) || 1,
@@ -116,6 +143,7 @@
     }
 
     initial_deposit.addEventListener('change', function () {
+        console.log(this);
         updateValue(this);
     });
     initial_deposit.addEventListener('change', function () {
