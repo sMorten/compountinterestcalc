@@ -5,11 +5,17 @@ const sass = require('gulp-sass')(require('sass'));
 var concat = require('gulp-concat');
 var browserSync = require('browser-sync').create();
 const cleanCSS = require('gulp-clean-css');
+const fileinclude = require('gulp-file-include');
 
 gulp.task('html', function(){
 	return gulp.src([
 		'./src/*.html'
-		]).pipe(gulp.dest('./distro/'))
+		])
+  .pipe(fileinclude({
+      prefix: '@@',
+      basepath: '@file'
+    }))
+  .pipe(gulp.dest('./distro/'))
 	.pipe(browserSync.reload({
       stream: true
     }));
@@ -38,7 +44,7 @@ gulp.task('sass', function(){
     }));
 });
 
-gulp.task('default',gulp.series('html','js','sass'),function(done){
+gulp.task('default',gulp.series('js','sass','html'),function(done){
 	return '';
 })
 
