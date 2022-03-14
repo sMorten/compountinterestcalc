@@ -20,6 +20,14 @@
         ];
     cInterestManager.registerListeners(listenerFields);
 
+    //Preset date field
+    var smcDate = new Date(),
+        smcYear = smcDate.getFullYear() + 1,
+        smcMonth = smcDate.getMonth(),
+        smcDay = smcDate.getDate();
+        smcMonth = smcMonth.toString().length < 2?"0"+smcMonth.toString():smcMonth;
+        smcDay = smcDay.toString().length < 2?"0"+smcDay.toString():smcDay;
+    document.querySelector("#smc_target_date").value = (smcYear+"-"+smcMonth+"-"+smcDay);
 
 
 

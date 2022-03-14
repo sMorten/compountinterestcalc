@@ -197,8 +197,12 @@ class CInterestClass {
 		        compound_frquency = document.querySelector("#compound_frequency"),
 		        your_contributions = document.querySelector("#cinterest_result_contributions"),
 		        your_compound_returns = document.querySelector("#cinterest_result_compounded_return"),
-		        your_value= document.querySelector("#cinterest_result_value");
-
+		        your_value= document.querySelector("#cinterest_result_value"),
+		        target_date = document.querySelector("#smc_target_date"),
+		        need_invest = document.querySelector('#smc-date-interval-amount'),
+		        need_interval = document.querySelector("#smc-date-interval"),
+		        need_goal = document.querySelector("#smc-date-goal"),
+		        need_date = document.querySelector("#smc-date-date");
 
 			if(this.mode==="fixed"){
 
@@ -210,13 +214,13 @@ class CInterestClass {
 
 		        var principal_dataset = {
 		            label: 'Total Principal',
-		            backgroundColor: 'rgb(0, 123, 255)',
+		            backgroundColor: this.settings.chart.principle_colour,
 		            data: []
 		        };
 
 		        var interest_dataset = {
 		            label: "Total Interest",
-		            backgroundColor: '#1AAF5D',
+		            backgroundColor: this.settings.chart.interest_colour,
 		            data: []
 		        };
 
@@ -252,8 +256,53 @@ class CInterestClass {
 		        }
 
 			} else if(this.mode=="date"){
-				//Build chart data around date mode
 
+				//Build chart data around date mode
+				var temp_date=target_date.value.split('-');
+				var target_day=temp_date[2];
+				var target_month=temp_date[1];
+				var target_year=temp_date[0];
+
+				var labels = [];
+		        for (var year = currentYear; year <= target_year; year++) {
+		            labels.push(year);
+		        }
+
+		         var principal_dataset = {
+		            label: 'Total Principal',
+		            backgroundColor: this.settings.chart.principle_colour,
+		            data: []
+		        };
+
+		        var interest_dataset = {
+		            label: "Total Interest",
+		            backgroundColor: this.settings.chart.interest_colour,
+		            data: []
+		        };
+		     
+		        t = target_year - currentYear;
+		       if(r){
+		       		console.log(investment_goal.value);
+			        var pmt_match = investment_goal.value / (((Math.pow(1+r,t*n)-1)/1)*(1+r));
+			        console.log(pmt_match);
+
+			        //Need to adjust payments to payment periods not compounding period.
+			        //reference http://www.tvmcalcs.com/index.php/tvm/formulas/annuity_due_formulas
+			        var balance = 0;
+			        for (var i = 1; i <= t; i++) {
+			        	var N = i*n;
+
+
+			        }
+
+			        //NEED TO BUILD THIS OUT - ACTION
+			    }
+
+
+				return {
+					labels: labels,
+					datasets: [principal_dataset, interest_dataset]
+				}
 
 			} else {
 				console.error("System mode not defined");
