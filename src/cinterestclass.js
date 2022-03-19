@@ -182,6 +182,7 @@ class CInterestClass {
 	            currentYear = (new Date()).getFullYear(),
 	            n = parseInt(document.querySelector("#compound_frequency").value),
 	            n2 = parseInt(document.querySelector("#contribution_frequency").value),
+	            G = P = parseFloat(document.getElementById('initial_deposit').dataset.value),
 	            total_principal = 0,
 	            total_interest = 0;
 
@@ -263,6 +264,11 @@ class CInterestClass {
 				var target_month=temp_date[1];
 				var target_year=temp_date[0];
 
+				var target_date_obj = new Date(target_year,target_month - 1, target_day);
+		        var date_now = new Date();
+		        var target_date_diff = (target_date_obj - date_now)/(3.154e10);  //Fractions of a year
+		        var y2 = Math.floor(n2*target_date_diff); // Need to update to contribution periods bewtween now and target date
+
 				var labels = [];
 		        for (var year = currentYear; year <= target_year; year++) {
 		            labels.push(year);
@@ -281,28 +287,44 @@ class CInterestClass {
 		        };
 		     
 
-		        var y2 = n2; // Need to update to contribution periods bewtween now and target date
+		        
 
-		        // Caculate monthly payments
-		        var payments = ((r/n2)*(investment_goal-P*Math.pow((1+(r/n2)),(y2))))/(1);
+		       if(r){
+	       		// Caculate monthly payments
+		        console.log(r + " " + n2 + " "+ G + " "+P + " ");
+		        var payments = ((r/n2)*(G-P*Math.pow((1+(r/n2)),(y2))))/(Math.pow((1+(r/n2)),y2)-1); // Review this appears to not be working correctly
+		        console.log(payments);
 
 		        t = target_year - currentYear;
 
 		        //Calculate the value each year up to target date
-
-		       if(r){
-		       		console.log(investment_goal.value);
-			        var pmt_match = investment_goal.value / (((Math.pow(1+r,t*n)-1)/1)*(1+r));
-			        console.log(pmt_match);
+			        var pmt_match = G / (((Math.pow(1+r,t*n)-1)/1)*(1+r));
+			       
 
 			        //Need to adjust payments to payment periods not compounding period.
 			        //reference http://www.tvmcalcs.com/index.php/tvm/formulas/annuity_due_formulas
 			        var balance = 0;
-			        for (var i = 1; i <= t; i++) {
-			        	var N = i*n;
+			        for (var i = 1; i <= y2; i++) {
+		            var principal = P + ( payments * n2 * i ),
+		                interest = 0,
+		                balance = principal;
+
+		            if (r) {
+		                var x = Math.pow(1 + r / n, n * i),
+		                    compound_interest = P * x,
+		                    contribution_interest = payments * (x - 1) / (r / n2);
+		                interest = (compound_interest + contribution_interest - principal).toFixed(0)
+		                balance = (compound_interest + contribution_interest).toFixed(0);
+		            }
+
+		            future_balance.innerHTML = '$' + smcNumberWithCommas(balance);
+		            principal_dataset.data.push(principal);
+		            interest_dataset.data.push(interest);
+		            total_principal = principal;
+		            total_interest = interest;
 
 
-			        }
+		        }
 
 			        //NEED TO BUILD THIS OUT - ACTION
 			    }
