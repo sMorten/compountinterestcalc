@@ -280,7 +280,16 @@ class CInterestClass {
 		            data: []
 		        };
 		     
+
+		        var y2 = n2; // Need to update to contribution periods bewtween now and target date
+
+		        // Caculate monthly payments
+		        var payments = ((r/n2)*(investment_goal-P*Math.pow((1+(r/n2)),(y2))))/(1);
+
 		        t = target_year - currentYear;
+
+		        //Calculate the value each year up to target date
+
 		       if(r){
 		       		console.log(investment_goal.value);
 			        var pmt_match = investment_goal.value / (((Math.pow(1+r,t*n)-1)/1)*(1+r));
