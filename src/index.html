@@ -2,7 +2,7 @@
 <html>
 <head>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
 
 
 
@@ -11,23 +11,23 @@
 <body>
     <!-- Start of app html -->
     <div class="cinterest">
-    	<div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h2 class="smc-heading">How Do You Plan To Reach Your Investment Goal?</h2>
-                    <div class="row controls-row">
-                        <div class="col col-xs-6">
+    	<div class="smw-container">
+        <div class="smw-row">
+            <div class="smw-col-md-6">
+                <h3 class="smc-heading">How Do You Plan To Reach Your Investment Goal?</h3>
+                    <div class="smw-row controls-row">
+                        <div class="col smw-col-xs-6">
                             <a href="#" id="smc-fixed">Contribute A Fixed Amount</a>
                         </div>
-                        <div class="col col-xs-6">
+                        <div class="col smw-col-xs-6">
                             <a href="#" id="smc-date">Use A Target Date</a>
                         </div>
                     </div>
            
             <div class="form-group smc-date-control">
                 <label for="investment_goal">Investment Goal</label>
-                <div class="row">
-                    <div class="input-group col-md-6 col-sm-8">
+                <div class="smw-row">
+                    <div class="input-group smw-col-md-6">
                         <div class="input-group-prepend">
                             <button class="btn btn-primary" type="button" data-counter="sub" data-field="investment_goal">&minus;</button>
                         </div>
@@ -40,8 +40,8 @@
             </div>
                 <div class="form-group smc-date-control">
                     <label for="smc_target_date">Target Date</label>
-                    <div class="row">
-                        <div class="input-group col-md-6 col-sm-8">
+                    <div class="smw-row">
+                        <div class="input-group smw-col-md-6">
                
                             <input class="form-control text-center" id="smc_target_date" type="date" name="smc_target_date">
                             
@@ -50,8 +50,8 @@
                 </div>
                 <div class="form-group">
                     <label for="initial_deposit">Initial Deposit</label>
-                    <div class="row">
-                        <div class="input-group col-md-6 col-sm-8">
+                    <div class="smw-row">
+                        <div class="input-group smw-col-md-6">
                             <div class="input-group-prepend">
                                 <button class="btn btn-primary" type="button" data-counter="sub" data-field="initial_deposit">&minus;</button>
                             </div>
@@ -65,8 +65,8 @@
 
                 <div class="form-group smc-fixed-control">
                     <label for="contribution_amount">Contributions</label>
-                    <div class="row">
-                        <div class="input-group col-md-6 col-sm-8">
+                    <div class="smw-row">
+                        <div class="input-group smw-col-md-6">
                             <div class="input-group-prepend">
                                 <button class="btn btn-primary" type="button" data-counter="sub" data-field="contribution_amount">&minus;</button>
                             </div>
@@ -101,8 +101,8 @@
 
                 <div class="form-group">
                     <label for="estimated_return">Estimated Rate of Return</label>
-                    <div class="row">
-                        <div class="input-group col-md-6 col-sm-8">
+                    <div class="smw-row">
+                        <div class="input-group smw-col-md-6">
                             <div class="input-group-prepend">
                                 <button class="btn btn-primary" type="button" data-counter="sub" data-field="estimated_return">&minus;</button>
                             </div>
@@ -114,7 +114,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row smc-fixed-control">
+                <div class="form-group smw-row smc-fixed-control">
                     <div class="col-sm-12">
                         <div>Compound Frequency</div>
                         <div class="form-check form-check-inline">
@@ -130,17 +130,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row smc-fixed-control">
+                <div class="form-group smw-row smc-fixed-control">
                     <label for="investment_timespan">Investment Time Span</label>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-8">
+                    <div class="smw-row">
+                        <div class="smw-col-md-6">
                             <input class="form-control" id="investment_timespan" type="range" name="investment_timespan" min="2" max="50" step="1" value="5">
                         </div>
                     </div>
                     <span id="investment_timespan_text">5 years</span>
                 </div>
             </div>
-            <div class="col-md-6 text-center cinterest_result">
+            <div class="smw-col-md-6 text-center cinterest_result">
                 
                 <canvas id="myChart"></canvas>
                 <div class="f-balance">
