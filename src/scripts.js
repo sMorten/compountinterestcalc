@@ -30,9 +30,7 @@
     document.querySelector("#smc_target_date").value = (smcYear+"-"+smcMonth+"-"+smcDay);
 
     cInterestManager.registerListeners(listenerFields);
-    document.querySelector("#smc_target_date").addEventListener('change',(el)=>{
-        console.log(el);
-    });
+
 
 })();
 
