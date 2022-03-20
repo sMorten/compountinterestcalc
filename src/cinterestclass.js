@@ -33,6 +33,7 @@ class CInterestClass {
 			date_date:'',
 
 		};
+		this.initialized = false;
 		this.chart_data = '';
 
 		this.changeMode(mode);
@@ -133,6 +134,12 @@ class CInterestClass {
 
 			} else {
 				console.error("Interest System - Invalid Mode");
+			}
+			
+			if(this.initialized){
+				this.updateChart();
+			} else {
+				this.initialized = true;
 			}
 
 		} else {
