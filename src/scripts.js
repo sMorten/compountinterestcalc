@@ -14,11 +14,11 @@
         '#contribution_amount',
         '#investment_goal',
         '#investment_timespan',
-        '#smc_target_date',
+        //'#smc_target_date',
         '#contribution_frequency',
         '#compound_frequency'
         ];
-    cInterestManager.registerListeners(listenerFields);
+
 
     //Preset date field
     var smcDate = new Date(),
@@ -29,7 +29,10 @@
         smcDay = smcDay.toString().length < 2?"0"+smcDay.toString():smcDay;
     document.querySelector("#smc_target_date").value = (smcYear+"-"+smcMonth+"-"+smcDay);
 
-
+    cInterestManager.registerListeners(listenerFields);
+    document.querySelector("#smc_target_date").addEventListener('change',(el)=>{
+        console.log(el);
+    });
 
 })();
 

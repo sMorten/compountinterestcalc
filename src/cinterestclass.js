@@ -189,7 +189,7 @@ class CInterestClass {
 	            currentYear = (new Date()).getFullYear(),
 	            n = parseInt(document.querySelector("#compound_frequency").value),
 	            n2 = parseInt(document.querySelector("#contribution_frequency").value),
-	            G = P = parseFloat(document.getElementById('initial_deposit').dataset.value),
+	            G = parseFloat(document.getElementById('investment_goal').dataset.value),
 	            total_principal = 0,
 	            total_interest = 0;
 
@@ -298,26 +298,29 @@ class CInterestClass {
 
 		       if(r){
 	       		// Caculate monthly payments
-		        console.log(r + " " + n2 + " "+ G + " "+P + " ");
-		        var payments = ((r/n2)*(G-P*Math.pow((1+(r/n2)),(y2))))/(Math.pow((1+(r/n2)),y2)-1); // Review this appears to not be working correctly
-		        console.log(payments);
+		      
+			        var payments = ((r/n2)*(G-P*Math.pow((1+(r/n2)),(y2))))/(Math.pow((1+(r/n2)),y2)-1); // Review this appears to not be working correctly
+			 
 
-		        t = target_year - currentYear;
+			        t = target_year - currentYear;
 
-		        //Calculate the value each year up to target date
-			        var pmt_match = G / (((Math.pow(1+r,t*n)-1)/1)*(1+r));
-			       
-
-			        //Need to adjust payments to payment periods not compounding period.
+	
+			        
 			        //reference http://www.tvmcalcs.com/index.php/tvm/formulas/annuity_due_formulas
 			        var balance = 0;
-			        for (var i = 1; i <= y2; i++) {
+			        for (var i = 1; i <= Math.ceil(target_date_diff); i++) {
+
+			        if(i>target_date_diff){
+			        	var principal = P + payments * y2,
+			        		interest = 0,
+			        		balance = principal;
+			        }else {
 		            var principal = P + ( payments * n2 * i ),
 		                interest = 0,
 		                balance = principal;
-
+		            }
 		            if (r) {
-		                var x = Math.pow(1 + r / n, n * i),
+		                var x = Math.pow(1 + r / 12, 12 * i),
 		                    compound_interest = P * x,
 		                    contribution_interest = payments * (x - 1) / (r / n2);
 		                interest = (compound_interest + contribution_interest - principal).toFixed(0)
@@ -334,7 +337,38 @@ class CInterestClass {
 		        }
 
 			        //NEED TO BUILD THIS OUT - ACTION
+
 			    }
+			    your_contributions.innerHTML = ("$" + smcNumberWithCommas(total_principal));
+		        your_compound_returns.innerHTML = ("$" + smcNumberWithCommas(total_interest));
+		        your_value.innerHTML = ("$" + smcNumberWithCommas(parseFloat(total_principal)+parseFloat(total_interest)));
+
+		        //Plan
+		        document.querySelector("#smc-date-interval-amount").innerHTML = "$" + payments.toFixed(2);
+		        var interv = 'monthly';
+		        switch(n2){
+		        	case 52:
+		        		interv = "weekly";
+		        	case 26:
+		        		interv = "bi-weekly";
+		        	case 24:
+		        		interv = "semi-monthly";
+		        	case 12:
+		        		interv = "monthly";
+		        	case 4:
+		        		interv = "quarterly";
+		        	case 2:
+		        		interv = "semi-annually";
+		        	case 1:
+		        		interv = "annually";
+		        	default:
+		        		interv = 'monthly'; 
+
+		        }
+
+		        document.querySelector('#smc-date-interval').innerHTML = interv;
+		        document.querySelector('#smc-date-goal').innerHTML = "$" + smcNumberWithCommas(G);
+		        document.querySelector('#smc-date-date').innerHTML = target_date.value;
 
 
 				return {
@@ -391,6 +425,10 @@ class CInterestClass {
 		            }
 		        });
 		    }
+
+		   document.querySelector("#smc_target_date").addEventListener('change',(el)=>{
+        		classThis.updateChart();
+    		});
 		} catch(err){
 			console.error(err);
 		}
