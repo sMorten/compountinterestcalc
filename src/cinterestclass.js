@@ -298,48 +298,45 @@ class CInterestClass {
 
 		       if(r){
 	       		// Caculate monthly payments
-		      
+		      		//This works
 			        var payments = ((r/n2)*(G-P*Math.pow((1+(r/n2)),(y2))))/(Math.pow((1+(r/n2)),y2)-1); // Review this appears to not be working correctly
 			 
 
-			        t = target_year - currentYear;
-
-	
-			        
+			      	//Need to fix this			        
 			        //reference http://www.tvmcalcs.com/index.php/tvm/formulas/annuity_due_formulas
 			        var balance = 0;
 			        for (var i = 1; i <= Math.ceil(target_date_diff); i++) {
 
-			        if(i>target_date_diff){
-			        	var principal = P + payments * y2,
-			        		interest = 0,
-			        		balance = principal;
-			        }else {
-		            var principal = P + ( payments * n2 * i ),
-		                interest = 0,
-		                balance = principal;
-		            }
-		            if (r) {
-		                var x = Math.pow(1 + r / 12, 12 * i),
-		                    compound_interest = P * x,
-		                    contribution_interest = payments * (x - 1) / (r / n2);
-		                interest = (compound_interest + contribution_interest - principal).toFixed(0)
-		                balance = (compound_interest + contribution_interest).toFixed(0);
-		            }
+				        if(i>target_date_diff){
+				        	var principal = P + payments * y2,
+				        		interest = 0,
+				        		balance = principal;
+				        }else {
+			            var principal = P + ( payments * n2 * i ),
+			                interest = 0,
+			                balance = principal;
+			            }
+			            if (r) {
+			                var x = Math.pow(1 + r / n2, n2 * i),
+			                    compound_interest = P * x,
+			                    contribution_interest = payments * (x - 1) / (r / n2);
+			                interest = (compound_interest + contribution_interest - principal).toFixed(0)
+			                balance = (compound_interest + contribution_interest).toFixed(0);
+			            }
 
-		            future_balance.innerHTML = '$' + smcNumberWithCommas(balance);
-		            principal_dataset.data.push(principal);
-		            interest_dataset.data.push(interest);
-		            total_principal = principal;
-		            total_interest = interest;
+			            future_balance.innerHTML = '$' + smcNumberWithCommas(balance);
+			            principal_dataset.data.push(principal);
+			            interest_dataset.data.push(interest);
+			            total_principal = principal;
+			            total_interest = interest;
 
 
-		        }
+		        	}
 
-			        //NEED TO BUILD THIS OUT - ACTION
+			      
 
 			    }
-			    your_contributions.innerHTML = ("$" + smcNumberWithCommas(total_principal));
+			    your_contributions.innerHTML = ("$" + smcNumberWithCommas(total_principal.toFixed(0)));
 		        your_compound_returns.innerHTML = ("$" + smcNumberWithCommas(total_interest));
 		        your_value.innerHTML = ("$" + smcNumberWithCommas(parseFloat(total_principal)+parseFloat(total_interest)));
 
