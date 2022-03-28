@@ -1,6 +1,13 @@
 function smcNumberWithCommas(x) {
    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+function monthDiff(d1, d2) {
+    var months;
+    months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth();
+    months += d2.getMonth();
+    return months <= 0 ? 0 : months;
+}
 class CInterestClass {
 	constructor(mode,graphPrincipleColour,graphInterestColour){
 
@@ -193,6 +200,8 @@ class CInterestClass {
 	            total_principal = 0,
 	            total_interest = 0;
 
+	             var p = n2/n; //Adjustment factor for non-common compounding and contribution frequencies
+
 
 	        var //initial_deposit = document.getElementById('initial_deposit'),
 		        contribution_amount = document.querySelector('#contribution_amount'),
@@ -274,11 +283,27 @@ class CInterestClass {
 				var target_date_obj = new Date(target_year,target_month - 1, target_day);
 		        var date_now = new Date();
 		        var target_date_diff = (target_date_obj - date_now)/(3.154e10);  //Fractions of a year
-		        var y2 = Math.floor(n2*target_date_diff); // Need to update to contribution periods bewtween now and target date
+		        var y2 = Math.floor(n2*target_date_diff)+1; // Need to update to contribution periods bewtween now and target date
+
+
 
 				var labels = [];
 		        for (var year = currentYear; year <= target_year; year++) {
-		            labels.push(year);
+		        	if(year==date_now.getFullYear()){
+		        		for(var month = date_now.getMonth()+1; month<=12; month++){
+		        			labels.push(month+"/"+year);
+		        		}
+		        	}else if(year<target_year){
+		        		for(var month = 1; month<=12; month++){
+		        			labels.push(month+"/"+year);
+		        		}
+		        		
+		        	} else {
+		        		for(var month = 1; month<=target_month; month++){
+		        			labels.push(month+"/"+year);
+		        		}
+		        	}
+		            
 		        }
 
 		         var principal_dataset = {
@@ -297,17 +322,18 @@ class CInterestClass {
 		        
 
 		       if(r){
-	       		// Caculate monthly payments
-		      		//This works
-			        var payments = ((r/n2)*(G-P*Math.pow((1+(r/n2)),(y2))))/(Math.pow((1+(r/n2)),y2)-1); // Review this appears to not be working correctly
-			 
 
+		       		var monthsActive = monthDiff(date_now,target_date_obj);
+		       		var Rn = r/(n),
+	       			payments = ((Rn)*(G-P*Math.pow((1+(Rn)),(y2*(1/p)))))/(Math.pow((1+(Rn)),y2*(1/p))-1)/p; // Review this appears to not be working correctly
+			 
+	       			console.log(r + " : "+ n + " : " + y2);
 			      	//Need to fix this			        
 			        //reference http://www.tvmcalcs.com/index.php/tvm/formulas/annuity_due_formulas
 			        var balance = 0;
-			        for (var i = 1; i <= Math.ceil(target_date_diff); i++) {
-
-				        if(i>target_date_diff){
+			        for (var i = 0; i <= y2; i++) {
+			        	
+				       /* if(i>target_date_diff){
 				        	var principal = P + payments * y2,
 				        		interest = 0,
 				        		balance = principal;
@@ -322,16 +348,27 @@ class CInterestClass {
 			                    contribution_interest = payments * (x - 1) / (r / n2);
 			                interest = (compound_interest + contribution_interest - principal).toFixed(0)
 			                balance = (compound_interest + contribution_interest).toFixed(0);
-			            }
+			            }*/
+			            var principal = (P + payments *i),
+			            x = Math.pow((1+Rn),(i*n)),
 
-			            future_balance.innerHTML = '$' + smcNumberWithCommas(balance);
-			            principal_dataset.data.push(principal);
+			            principal_w_interest = principal * x,
+			            payments_w_interest = payments  * (x-1)/(Rn),
+			            balance = (principal_w_interest + payments_w_interest).toFixed(0),
+			            interest = (balance - principal).toFixed(0);
+			            console.log(x);
+			            console.log(balance + " : " + principal + " : " + interest);
+			            console.log("Test: "+payments_w_interest + " : "+principal_w_interest);
+			            console.log(Rn);
+			            
+			            principal_dataset.data.push(principal.toFixed(0));
 			            interest_dataset.data.push(interest);
 			            total_principal = principal;
 			            total_interest = interest;
 
 
 		        	}
+		        	future_balance.innerHTML = '$' + smcNumberWithCommas(balance);
 
 			      
 
