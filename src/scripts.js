@@ -16,7 +16,9 @@
         '#investment_timespan',
         //'#smc_target_date',
         '#contribution_frequency',
-        '#compound_frequency'
+        '#compound_frequency',
+        '#smc_target_year',
+        '#smc_target_month'
         ];
 
 
@@ -29,6 +31,9 @@
         smcMonthZero = smcMonthZero.toString().length < 2?"0"+smcMonthZero.toString():smcMonthZero;
         smcDay = smcDay.toString().length < 2?"0"+smcDay.toString():smcDay;
     document.querySelector("#smc_target_date").value = (smcYear+"-"+smcMonthZero+"-"+smcDay);
+
+    document.querySelector("#smc_target_year").value = smcYear;
+    document.querySelector("#smc_target_year").min = smcYear-1;
 
     cInterestManager.registerListeners(listenerFields);
 
