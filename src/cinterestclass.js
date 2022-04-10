@@ -8,6 +8,9 @@ function monthDiff(d1, d2) {
     months += d2.getMonth();
     return months <= 0 ? 0 : months;
 }
+
+var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
 class CInterestClass {
 	constructor(mode,graphPrincipleColour,graphInterestColour){
 
@@ -90,6 +93,28 @@ class CInterestClass {
 	        document.querySelector('#investment_timespan_text').innerHTML = this.value + ' years';
 	        
     	});
+	}
+
+	//Function to calculate months between two dates
+	dateDiff(tMonth,tYear){
+		var cDate 	= 	new Date(),
+			cYear 	= 	cDate.getFullYear(),
+			cMonth	= 	cDate.getMonth()+1,
+			cRef 	=	cYear * 12 + cMonth,
+			tRef 	=	tYear * 12 + tMonth;
+
+
+		if(tRef < cRef){
+			return -1;
+		}
+
+		var months = (tMonth < cMonth) ? (tMonth+12)-cMonth : tMonth - cMonth;
+		months += (tMonth < cMonth) ? (tYear-cYear)*12 - 12 : (tYear - cYear) * 12;
+
+
+		return months;
+
+
 	}
 
 	//Function to change system modes
@@ -194,6 +219,7 @@ class CInterestClass {
 	            //n2 = parseInt(document.querySelector('[name="contribution_period"]:checked').value), // Contribution Period
 	            t = parseInt(document.querySelector('#investment_timespan').value), // Investment Time Span
 	            currentYear = (new Date()).getFullYear(),
+	            currentMonth = (new Date()).getMonth() + 1,
 	            n = parseInt(document.querySelector("#compound_frequency").value),
 	            n2 = parseInt(document.querySelector("#contribution_frequency").value),
 	            G = parseFloat(document.getElementById('investment_goal').dataset.value),
@@ -275,19 +301,35 @@ class CInterestClass {
 			} else if(this.mode=="date"){
 
 				//Build chart data around date mode
-				var temp_date=target_date.value.split('-');
-				var target_day=temp_date[2];
-				var target_month=temp_date[1];
-				var target_year=temp_date[0];
+				var target_month = parseInt(document.querySelector("#smc_target_month").value);
+				var target_year = parseInt(document.querySelector("#smc_target_year").value);
 
-				var target_date_obj = new Date(target_year,target_month - 1, target_day);
-		        var date_now = new Date();
-		        var target_date_diff = (target_date_obj - date_now)/(3.154e10);  //Fractions of a year
-		        var y2 = Math.floor(n2*target_date_diff)+1; // Need to update to contribution periods bewtween now and target date
+				var current_date = new Date(),
+					current_month = current_date.getMonth() + 1,
+					current_year = current_date.getFullYear(),
+					cRef = current_year * 12 + current_month, // May have an issue here
+					tRef = target_year * 12 + target_month;
 
+
+				var investment_period = this.dateDiff(target_month,target_year);//months
+
+				// c contribution amount
+				// n compounding frequency
+				// n2 contribution frequency
+				// G Investment Goal
+
+				var eff_r 	= (Math.pow((1 + r * n/12),n/n2)-1).toFixed(8),
+					num_c 	= (investment_period/n2),
+					payment_prefix = (G - P * Math.pow( (1 + eff_r),num_c)),
+					payment_suffix = (eff_r > 0) ? (eff_r/((Math.pow(1+eff_r,num_c))-1)):(1/num_c),
+					payment = (payment_prefix * payment_suffix)/(1 + eff_r);
 
 
 				var labels = [];
+
+////////////////////////////////////////////////////////////////////////////////
+				// Need to iterate over every monh look at the modules vs compounding interval
+
 		        for (var year = currentYear; year <= target_year; year++) {
 		        	if(year==date_now.getFullYear()){
 		        		for(var month = date_now.getMonth()+1; month<=12; month++){
@@ -348,7 +390,7 @@ class CInterestClass {
 			                    contribution_interest = payments * (x - 1) / (r / n2);
 			                interest = (compound_interest + contribution_interest - principal).toFixed(0)
 			                balance = (compound_interest + contribution_interest).toFixed(0);
-			            }*/
+			            }*//*
 			            var principal = (P + payments *i),
 			            x = Math.pow((1+Rn),(i*n)),
 
@@ -409,6 +451,7 @@ class CInterestClass {
 					labels: labels,
 					datasets: [principal_dataset, interest_dataset]
 				}
+				*/
 
 			} else {
 				console.error("System mode not defined");
