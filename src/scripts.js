@@ -31,7 +31,7 @@
         smcMonthZero = smcMonthZero.toString().length < 2?"0"+smcMonthZero.toString():smcMonthZero;
         smcDay = smcDay.toString().length < 2?"0"+smcDay.toString():smcDay;
     document.querySelector("#smc_target_date").value = (smcYear+"-"+smcMonthZero+"-"+smcDay);
-
+    document.querySelector("#smc_target_month").value = (smcMonth + 1);
     document.querySelector("#smc_target_year").value = smcYear;
     document.querySelector("#smc_target_year").min = smcYear-1;
 
