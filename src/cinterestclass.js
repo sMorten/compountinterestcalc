@@ -242,7 +242,7 @@ class CInterestClass {
 		        your_contributions = document.querySelector("#cinterest_result_contributions"),
 		        your_compound_returns = document.querySelector("#cinterest_result_compounded_return"),
 		        your_value= document.querySelector("#cinterest_result_value"),
-		        target_date = document.querySelector("#smc_target_date"),
+		       // target_date = document.querySelector("#smc_target_date"),
 		        need_invest = document.querySelector('#smc-date-interval-amount'),
 		        need_interval = document.querySelector("#smc-date-interval"),
 		        need_goal = document.querySelector("#smc-date-goal"),
