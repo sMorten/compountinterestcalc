@@ -38,6 +38,14 @@ body.smc-body{
       padding:10px 5px;
       margin-left:20px;
       margin-right:20px;
+
+      h4 {
+        text-align: center;
+        font-weight:normal;
+        font-size:14px;
+        margin-top:20px;
+        margin-bottom:10px;
+      }
     }
     .f-balance {
       width:100%;
@@ -309,3 +317,6 @@ input[type=range]:focus::-ms-fill-upper {
   }
 }
 
+#smw-alert {
+    color:red;
+}

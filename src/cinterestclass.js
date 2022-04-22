@@ -107,7 +107,8 @@ class CInterestClass {
             data: classThis.getChartData(),
             options: {
                 legend: {
-                    display: false
+                    display: true,
+                    position: "bottom"
                 },
                 tooltips: {
                     mode: 'index',
@@ -139,7 +140,13 @@ class CInterestClass {
                             labelString: 'Balance'
                         }
                     }]
+                },
+                elements:{
+                	point:{
+                		radius:1
+                	}
                 }
+                
             }
 		});
 		
