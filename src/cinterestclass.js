@@ -11,9 +11,63 @@ function monthDiff(d1, d2) {
 
 var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
+class SMWAlertHandler {
+	constructor(){
+		this.alertbox = document.querySelector("#smw-alert");
+		this.alerttext = document.querySelector("#smw-alert .alert-text");
+		this.fadeOut(this.alertbox);
+	}
+
+	setAlert(alertType,alertText,timeout = 3500){
+		console.log("settings alert");
+		this.alerttext.innerHTML = alertText;
+		var alertClass;
+		switch(alertType){
+			case 'error':
+				alertClass = 'smw-error';
+			case 'success':
+				alertClass = 'smw-success';
+			default:
+				alertClass = 'smw-default';
+		}
+		this.alertbox.classList.add(alertClass);
+		this.fadeIn(this.alertbox,'block');
+		setTimeout(() => {
+			this.fadeOut(this.alertbox);
+			this.alertbox.classList.remove(alertClass);
+			this.alerttext.innerHTML = '';
+		},timeout);
+
+
+	}
+
+	fadeOut(el) {
+        el.style.opacity = 1;
+        (function fade() {
+            if ((el.style.opacity -= .1) < 0) {
+                el.style.display = "none";
+            } else {
+                requestAnimationFrame(fade);
+            }
+        })();
+    }
+
+    fadeIn(el, display) {
+        el.style.opacity = 0;
+        el.style.display = display || "block";
+        (function fade() {
+            var val = parseFloat(el.style.opacity);
+            if (!((val += .1) > 1)) {
+                el.style.opacity = val;
+                requestAnimationFrame(fade);
+            }
+        })();
+    }
+}
+
 class CInterestClass {
 	constructor(mode,graphPrincipleColour,graphInterestColour){
-
+		this.alertHandler = new SMWAlertHandler();
 		this.settings = {
 			'chart': {
 				'principle_colour': graphPrincipleColour,
@@ -210,6 +264,7 @@ class CInterestClass {
 
 	//Build Chart Data
 	getChartData(){
+
 		//try{
 			//Set Fields
 			var P = parseFloat(document.getElementById('initial_deposit').dataset.value), // Principal
@@ -228,7 +283,11 @@ class CInterestClass {
 	            total_balance = 0;
 
 	             var p = n2/n; //Adjustment factor for non-common compounding and contribution frequencies
-
+	        if(n > n2){
+	        	//set alert
+	        	this.alertHandler.setAlert('error',"The Compound Frequency cannot be bigger than the Contribution Frequency");
+	        	return "error";
+	        }
 
 	        var //initial_deposit = document.getElementById('initial_deposit'),
 		        contribution_amount = document.querySelector('#contribution_amount'),
@@ -250,13 +309,33 @@ class CInterestClass {
 
 			if(this.mode==="fixed"){
 
-				//Build chart data around fixed mode
-				var labels = [];
-		        for (var year = currentYear; year < currentYear + t; year++) {
-		            labels.push(year);
-		        }
 
-		        var principal_dataset = {
+				var current_date = new Date(),
+					current_month = current_date.getMonth(),
+					target_month = current_month + 1,
+					
+					current_year = current_date.getFullYear(),
+					target_year = t + current_year,
+					cRef = current_year * 12 + current_month, // May have an issue here
+					tRef = target_year * 12 + target_month;
+
+
+				var investment_period = this.dateDiff(target_month,target_year);//months
+
+
+				// c contribution amount
+				// n compounding frequency
+				// n2 contribution frequency
+				// G Investment Goal
+
+				var eff_r 	= (Math.pow((1 + r * n/12),n/n2)-1),
+					num_c 	= (investment_period/n2),
+					payment = c;
+
+
+				var labels = [];
+
+				var principal_dataset = {
 		            label: 'Total Principal',
 		            backgroundColor: this.settings.chart.principle_colour,
 		            data: []
@@ -268,37 +347,76 @@ class CInterestClass {
 		            data: []
 		        };
 
-		        for (var i = 1; i <= t; i++) {
-		            var principal = P + ( c * n2 * i ),
-		                interest = 0,
-		                balance = principal;
+////////////////////////////////////////////////////////////////////////////////
+				// Need to iterate over every monh look at the modules vs compounding interval
 
-		            if (r) {
-		                var x = Math.pow(1 + r / n, n * i),
-		                    compound_interest = P * x,
-		                    contribution_interest = c * (x - 1) / (r / n2);
-		                interest = (compound_interest + contribution_interest - principal).toFixed(0)
-		                balance = (compound_interest + contribution_interest).toFixed(0);
-		            }
+				for(var inter = 0; inter <= investment_period; inter = inter + n2){
+					var dateLabel,principleA, interestA;
+					if(inter == 0){
+						dateLabel = monthNames[current_month] + " " + current_year;
+						principleA = P;
+						interestA = 0;
+						total_balance = P;
+					} else {
+						var tDate = current_month + inter + current_year*12,
+							tYear = (tDate - tDate%12)/12,
+							tMonth = tDate % 12;
+						dateLabel = monthNames[tMonth] + " " + tYear;
+						interestA = (total_balance + payment) * eff_r;
+						principleA = payment;
+						total_balance += payment + interestA;
 
-		            future_balance.innerHTML = '$' + smcNumberWithCommas(balance);
-		            principal_dataset.data.push(principal);
-		            interest_dataset.data.push(interest);
-		            total_principal = principal;
-		            total_interest = interest;
+					}	
+					
+					
+					total_principal += principleA;
+					total_interest += interestA;
 
+					//Assign to appropriate arrays
+					labels.push(dateLabel);
+					principal_dataset.data.push(total_principal.toFixed(0));
+			        interest_dataset.data.push(total_interest.toFixed(0));
+				}
+
+
+
+
+		        	
+	        	future_balance.innerHTML = '$' + smcNumberWithCommas(total_balance.toFixed(0));
+
+			      
+			    your_contributions.innerHTML = ("$" + smcNumberWithCommas(total_principal.toFixed(0)));
+		        your_compound_returns.innerHTML = ("$" + smcNumberWithCommas(total_interest.toFixed(0)));
+		        your_value.innerHTML = '$' + smcNumberWithCommas(total_balance.toFixed(0));
+
+		        //Plan
+		        document.querySelector("#smc-date-interval-amount").innerHTML = "$" + payment.toFixed(2);
+		        var interv = 'monthly';
+		        switch(n2){
+		        	
+		        	case 1:
+		        		interv = "monthly";
+		        	case 3:
+		        		interv = "quarterly";
+		        	case 6:
+		        		interv = "semi-annually";
+		        	case 12:
+		        		interv = "annually";
+		        	default:
+		        		interv = 'monthly'; 
 
 		        }
 
-		        your_contributions.innerHTML = ("$" + smcNumberWithCommas(total_principal));
-		        your_compound_returns.innerHTML = ("$" + smcNumberWithCommas(total_interest));
-		        your_value.innerHTML = ("$" + smcNumberWithCommas(parseFloat(total_principal)+parseFloat(total_interest)));
+		        document.querySelector('#smc-date-interval').innerHTML = interv;
+		        document.querySelector('#smc-date-goal').innerHTML = "$" + smcNumberWithCommas(G);
+		        
 
-		        return {
-		            labels: labels,
-		            datasets: [principal_dataset, interest_dataset]
-		        }
 
+				return {
+					labels: labels,
+					datasets: [principal_dataset, interest_dataset]
+				}
+				
 			} else if(this.mode=="date"){
 
 				//Build chart data around date mode
@@ -364,7 +482,7 @@ class CInterestClass {
 					
 					total_principal += principleA;
 					total_interest += interestA;
-					console.log(total_interest + " : " + total_principal + " : " + total_balance);
+					
 
 					//Assign to appropriate arrays
 					labels.push(dateLabel);
@@ -462,9 +580,10 @@ class CInterestClass {
 		        });
 		    }
 
-		   document.querySelector("#smc_target_date").addEventListener('change',(el)=>{
+		   /*document.querySelector("#smc_target_date").addEventListener('change',(el)=>{
         		classThis.updateChart();
-    		});
+    		});*/
+
 		} catch(err){
 			console.error(err);
 		}

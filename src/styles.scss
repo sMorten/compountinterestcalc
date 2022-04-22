@@ -1,4 +1,8 @@
-body{
+$light-blue : #CEDFF2;
+$banners: #00305B;
+$accentc: #F19B1E;
+
+body.smc-body{
   margin-top: 60px;
 }
 .smc-hidden {
@@ -11,17 +15,229 @@ body{
   margin-left:auto;
   margin-right:auto;
 
+  p,h1,h2,h3,h4,h5,h6,div {
+    font-family:sans-serif;
+  }
+  .cinterest_result {
+    background-color: $light-blue;
+    padding-top:20px;
+    padding-bottom:20px;
+
+    .smw-heading {
+      width:100%;
+      h2 {
+        text-align: center;
+          font-size:32px;
+          font-weight:lighter;
+          
+      }
+    }
+
+    .smw-chart-wrapper {
+      background-color: #fff;
+      padding:10px 5px;
+      margin-left:20px;
+      margin-right:20px;
+    }
+    .f-balance {
+      width:100%;
+      margin-top:40px;
+      margin-bottom:40px;
+      padding-top:40px;
+      padding-bottom:40px;
+      background-color: $banners;
+      
+      .smw-bheading {
+          margin-left:auto;
+          margin-right:auto;
+          text-align:center;
+          color:#fff;
+
+          h4 {
+            font-size:18px;
+              margin-top:0;
+              margin-bottom:5px;
+         
+          }
+          
+          #future_balance {
+              font-size:36px;
+              font-weight:lighter;
+          }
+      }
+        
+    }
+      .cinterest_result_detail {
+          padding:0 40px;
+          
+          h3 {
+              font-weight: lighter;
+          }
+          
+          .result_row {
+              display:flex;
+              justify-content: space-between;
+              
+              &.smc-date-result {
+                  display:block;
+                  .result_title h3{
+                      font-weight:bold;
+                  }
+                  .result_result p {
+                      font-weight:bold;
+                      font-size:110%;
+                  }
+                  
+              }
+          }
+          
+          .smc-fixed-result {
+              font-weight:bold;
+              font-size:110%;
+          }
+      }
+  }
+
+
 
   .smw-row {
     display:flex;
     flex-wrap:wrap;
+    
+      .form-group .smw-row, .form-group select, .form-group input {
+          margin-top:5px;
+         
+      }
+      
+      .form-group #investment_timespan {
+          margin-top:-5px;
+          margin-right:5px;
+          margin-left:5px;
+          
+      }
+      #investment_timespan_text {
+          margin-left:10px;
+      }
+      
+    
+      input,select {
+          background-color: $light-blue;
+          
+          text-align: center;
+          padding-top:5px;
+          padding-bottom:5px;
+          border:1px solid #eee;
+          border-radius:5px;
+      }
+      .input-group{
+          .input-group-prepend button,.input-group-append button {
+              padding-top:5px;
+              padding-bottom:5px;
+              padding-right:7px;
+              padding-left: 7px;
+              background-color: $accentc;
+              border:1px solid #eee;
+              border-radius:5px;
+              margin-top:5px;
+              
+              &:hover{
+                  cursor: pointer;
+              }
+          }
+      }
+      
+      input[type=range] {
+  -webkit-appearance: none;
+  margin: 18px 0;
+  width: 100%;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: $banners;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 24px;
+  width: 24px;
+  border-radius: 12px;
+  background: $accentc;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -9px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: $banners;
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: $banners;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 24px;
+  width: 24px;
+  border-radius: 12px;
+  background: $accentc;
+  cursor: pointer;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  border-width: 16px 0;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: $banners;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-fill-upper {
+  background: $banners;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 24px;
+  width: 24px;
+  border-radius: 12px;
+  background: $accentc;
+  cursor: pointer;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: $banners;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: $banners;
+}
 
     .smw-col-md-6 {
-      width:50%;
+      width:44%;
       @media screen and (max-width:720px){
-        width:100%;
-        padding-left:20px;
-        padding-right:20px;
+        width:84%;
+        padding-left:5%;
+        padding-right:5%;
       }
 
     }
@@ -41,8 +257,8 @@ body{
     }
 
     .form-group {
-      padding-top:15px;
-      padding-bottom:15px;
+      padding-top:10px;
+      padding-bottom:10px;
     }
 
   }
@@ -50,20 +266,39 @@ body{
   .controls-row {
 
     width:100%;
+    margin-bottom:20px;
     .smw-col-xs-6 {
-      margin-left:20px;
-      margin-right:20px;
+
 
       a {
-        background-color:#c3c3c3;
-        padding:10px 15px;
-        border-radius:5px;
+        border:1px solid #777;
+        color:#777;
+        padding:10px 25px;
+       
         text-decoration:none;
+          
+          &.smc-active {
+              background-color:$banners;
+              color:#fff;
+          }
       }
+    
+        &.smc-btn-left a {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius:5px;
+        }
+        &.smc-btn-right a {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius:5px;
+        }
     }
   }
 
 
+}
+.smw-disclaimer {
+    font-size:12px;
+    font-style: italic;
 }
 
 .smc-active {

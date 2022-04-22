@@ -16,10 +16,10 @@
             <div class="smw-col-md-6">
                 <h3 class="smc-heading">How Do You Plan To Reach Your Investment Goal?</h3>
                     <div class="smw-row controls-row">
-                        <div class="col smw-col-xs-6">
+                        <div class="col smw-col-xs-6 smc-btn-left">
                             <a href="#" id="smc-fixed">Contribute A Fixed Amount</a>
                         </div>
-                        <div class="col smw-col-xs-6">
+                        <div class="col smw-col-xs-6 smc-btn-right">
                             <a href="#" id="smc-date">Use A Target Date</a>
                         </div>
                     </div>
@@ -144,24 +144,36 @@
                 <div class="form-group smw-row smc-fixed-control">
                     <label for="investment_timespan">Investment Time Span</label>
                     <div class="smw-row">
-                        <div class="smw-col-md-6">
+                        <div>
                             <input class="form-control" id="investment_timespan" type="range" name="investment_timespan" min="2" max="50" step="1" value="5">
                         </div>
                     </div>
                     <span id="investment_timespan_text">5 years</span>
                 </div>
+
+                <div id="smw-alert">
+                    <p class="alert-text"></p>
+                </div>
+
+
             </div>
             <div class="smw-col-md-6 text-center cinterest_result">
-                
-                <canvas id="myChart"></canvas>
+                <div class="smw-heading">
+                    <h2>Compound Growth</h2>
+                </div>
+                <div class="smw-chart-wrapper">
+                    <canvas id="myChart"></canvas>
+                </div>
                 <div class="f-balance">
-                    <div><h4>Future Balance</h4></div>
-                    <div class="h3" id="future_balance">?</div>
-
+                    <div class="smw-bheading"><h4>Your Compounded Returns</h4>
+                        <div class="h3" id="future_balance">?</div>
+                    </div>
                 </div>
                 <div class="cinterest_result_detail">
                     <h3>Results</h3>
+                    <h2>Your Plan</h2>
                     <div class="result_row">
+                        
                         <div class="result_title">
                             <p>Your Contributions:</p>
                         </div>
@@ -186,12 +198,13 @@
                         </div>
                     </div>
                     <div class="result_row smc-date-result">
-                        <div class="result_title">
-                            <h3>Your Plan:</h3>
-                        </div>
+                        
                         <div class="result_result">
                             <p id="cinterest_plan_value">You need to invest <span id="smc-date-interval-amount">$0</span> <span id="smc-date-interval">monthly</span> to reach your goal of <span id="smc-date-goal">$0</span> by <span id="smc-date-date">January</span></p>
                         </div>
+                    </div>
+                    <div class="smw-disclaimer">
+                        <p>This calculator is for illustration purposes only.</p>
                     </div>
                 </div>
             </div>
